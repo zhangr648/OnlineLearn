@@ -29,6 +29,7 @@ import java.util.List;
 @RestController
 @Api(description = "讲师管理")
 @RequestMapping("/eduservice/teacher")
+@CrossOrigin
 public class EduTeacherController {
 
     @Autowired
@@ -45,10 +46,16 @@ public class EduTeacherController {
     }
 
     //2 逻辑删除讲师的方法
-    @DeleteMapping("{id}")
     @ApiOperation(value = "逻辑删除讲师")
-    public boolean removeById(@ApiParam(name = "id", value = "讲师ID", required = true) @PathVariable String id){
-        return teacherService.removeById(id);
+    @DeleteMapping("{id}")
+    public R removeTeacher(@ApiParam(name = "id", value = "讲师ID", required = true)
+                           @PathVariable String id) {
+        boolean flag = teacherService.removeById(id);
+        if(flag) {
+            return R.ok();
+        } else {
+            return R.error();
+        }
     }
 
     //3 分页查询讲师的方法
@@ -60,11 +67,11 @@ public class EduTeacherController {
         Page<EduTeacher> pageTeacher = new Page<>(current,limit);
 
         //模拟一个异常
-        try {
-            int a = 10/0;
-        }catch(Exception e) {
-            throw new GuliException(20001,"出现自定义异常");
-        }
+//        try {
+//            int a = 10/0;
+//        }catch(Exception e) {
+//            throw new GuliException(20001,"出现自定义异常");
+//        }
 
         //调用方法实现分页
         //调用方法时候，底层封装，把分页所有数据封装到pageTeacher对象里面
